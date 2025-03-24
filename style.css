@@ -1,0 +1,162 @@
+body {
+  margin: 0;
+  background: #141414;
+  color: white;
+  text-align: center;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  align-items: center;
+  height: 8vh;
+}
+.logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: red;
+}
+.sign-in {
+  background: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 65vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("https://cdn.mos.cms.futurecdn.net/rDJegQJaCyGaYysj2g5XWY.jpg");
+  background-size: cover;
+}
+.content {
+  max-width: 600px;
+}
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.form {
+  margin-top: 20px;
+  position: relative;
+}
+.form input {
+  padding: 20px;
+  width: 50%;
+  border: none;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+.form button {
+  position: absolute;
+  right: 38%;
+  top: 5px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.form button img {
+  width: 23px;
+  margin-top: 3px;
+  padding: 6px 7px;
+  color: white;
+}
+select {
+  padding: 18px;
+  width: 20%;
+  border: none;
+  border-radius: 30px;
+  display: inline;
+  margin-right: 10px;
+}
+img {
+  width: 200px;
+}
+
+/* Movie Cards */
+.movie-card {
+    display: inline-block;
+    width: 30%;
+    margin: 15px;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    transition: transform 0.3s ease;
+  }
+
+  .movie-card:hover {
+    transform: scale(1.05);
+  }
+
+  .movie-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .movie-details {
+    margin-top: 10px;
+  }
+
+  .movie-details h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+  }
+
+  .movie-details p {
+    font-size: 16px;
+  }
+
+  .movie-details button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .movie-details button:hover {
+    background: darkred;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .pagination button {
+    background-color: #333;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    margin: 0 5px;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+
+  .pagination button:hover {
+    background-color: red;
+  }
+
+  .pagination button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+
+  .pagination .active {
+    background-color: red;
+    font-weight: bold;
+  }
