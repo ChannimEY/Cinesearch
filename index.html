@@ -42,6 +42,13 @@
     />
 
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <header>
@@ -50,25 +57,26 @@
     <main>
       <section class="hero">
         <div class="content">
-          <h1>Unlimited movies, TV shows, and more</h1>
-          <div class="searchForm">
-            <input id="searchBox" type="text" placeholder="Enter movie name" />
-            <ul>
-              <li>
-                <p id="filter">Type ▼</p>
-                <ul class="dropdown">
-                  <li id="movieFilter">Movie</li>
-                  <li id="seriesFilter">Series</li>
-                </ul>
-              </li>
-            </ul>
-            <button id="searchBtn">
-              <img src="./asset/search.png" alt="" />
-            </button>
-          </div>
+          <h1><span class="typing"></span></h1>
+
+        </div>
+        <div class="searchForm">
+          <input id="searchBox" type="text" placeholder="Enter movie name" />
+          <ul>
+            <li>
+              <p id="filter">Type<i class="fa-solid fa-caret-down"></i></p>
+              <ul class="dropdown">
+                <li id="movieFilter">Movie</li>
+                <li id="seriesFilter">Series</li>
+              </ul>
+            </li>
+          </ul>
+          <button id="searchBtn">
+            <img src="./asset/search.png" alt="" />
+          </button>
         </div>
       </section>
-      <p id="trending" class="trending">Trending Movie</p>
+      <!-- <p id="trending" class="trending">Trending Movie</p> -->
       <div id="movieDisplay"></div>
       <div class="navigation">
         <button id="prevoius">Prevoius</button>
@@ -77,11 +85,28 @@
       </div>
       <div id="info" class="info"></div>
     </main>
+
     <footer>
       <hr />
+      
       <p>© 2025 CineSearch</p>
     </footer>
 
     <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+      var options = {
+        strings: [
+          " Unlimited movies, TV shows, and more.",
+          " Where Every Film Finds You. 🔍",
+          "Find the Perfect Movie, Anytime. 🍿",
+        ],
+        typeSpeed: 150,
+        backSpeed: 150,
+        loop: true,
+      };
+
+      var typed = new Typed(".typing", options);
+    </script>
   </body>
 </html>

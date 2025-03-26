@@ -2,13 +2,12 @@ const api_key = "bca9ef1e1dad6a042f3fb2ddd3d107ab";
 const img_container = document.getElementById("movieDisplay");
 let movie_image = [];
 
-let current_page = 1;
 const pagination_element = document.getElementById("pagination");
 const rows = 3;
 const previous_btn = document.getElementById("prevoius");
 const next_btn = document.getElementById("next");
 const search_btn = document.getElementById("searchBtn");
-
+let current_page = 1;
 const filter = document.getElementById("filter");
 const movie_filter = document.getElementById("movieFilter");
 const series_filter = document.getElementById("seriesFilter");
@@ -27,6 +26,9 @@ fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${api_key}`)
   })
   .catch((error) => console.log(error));
 
+// Hide movie details initially
+info.style.display = "none";
+
 function displayMovies() {
   const start = (current_page - 1) * rows;
   const end = start + rows;
@@ -35,29 +37,43 @@ function displayMovies() {
   img_container.innerHTML = paginated_movies
     .map((movie) => {
       return `
-      <div data-aos="zoom-in-up" id="movie">
-                <img src="${
-                  movie.poster_path
-                    ? "https://image.tmdb.org/t/p/w500/" + movie.poster_path
-                    : "https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
-                }" alt="${filter_value == "Series" ? movie.name : movie.title}"/>
-        <div class="details">
-            <span>${filter_value == "Series" ? "Series" : "Movie"}</span>
-            <h2>${filter_value == "Series" ? movie.name : movie.title}</h2>
-            <div>
-              <p>${
-                filter_value == "Series"
-                  ? movie.first_air_date.substring(0, 4)
-                  : movie.release_date.substring(0, 4)
-              }</p>
-            </div>
-
-            <button class="detail-btn" data-id=${movie.id}>Details</button>
+        <div id="movie">
+          <img class="movie-img"
+               data-src="${
+                 movie.poster_path
+                   ? "https://image.tmdb.org/t/p/w500/" + movie.poster_path
+                   : "fallback"
+               }"
+               alt="${filter_value == "Series" ? movie.name : movie.title}"/>
+          <div class="details">
+              <span>${filter_value == "Series" ? "Series" : "Movie"}</span>
+              <h2>${filter_value == "Series" ? movie.name : movie.title}</h2>
+              <div>
+                <p>${
+                  filter_value == "Series"
+                    ? movie.first_air_date?.substring(0, 4) || "N/A"
+                    : movie.release_date?.substring(0, 4) || "N/A"
+                }</p>
+              </div>
+              <button class="detail-btn" data-id=${movie.id}>Details</button>
+          </div>
         </div>
-      </div>
-  `;
+        `;
     })
     .join("");
+
+  document.querySelectorAll(".movie-img").forEach((img) => {
+    img.src =
+      img.dataset.src !== "fallback"
+        ? img.dataset.src
+        : "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
+
+    img.onerror = function () {
+      this.src =
+        "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
+    };
+  });
+
   document.querySelectorAll(".detail-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
       const movie_id = event.target.dataset.id;
@@ -154,26 +170,27 @@ function fetchMovieDetail(id) {
             : "Writer not found in this API!";
           info.style.display = "flex";
           info.innerHTML = `
-            <img  src="https://image.tmdb.org/t/p/w500/${
-              data.poster_path
-            }" alt="${is_movie ? data.title : data.name}" />
+<img src="https://image.tmdb.org/t/p/w500/${data.poster_path}"
+     alt="${is_movie ? data.title : "No Image Available"}"
+     onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=';" />
+
             <div class="movie-details">
-              <p><span>Title:</span></p>
+              <b><span>Title:</span></b>
               <p>${is_movie ? data.title : data.name}</p>
-              <p><span>Released:</span></p>
+              <b><span>Released:</span></b>
               <p>${is_movie ? data.release_date : data.first_air_date}</p>
-              <p><span>Genre:</span></p>
+              <b><span>Genre:</span></b>
               <p>${genres}</p>
-              <p><span>Country:</span></p>
+              <b><span>Country:</span></b>
               <p>${data.origin_country}</p>
-              <p><span>Director:</span></p>
+              <b><span>Director:</span></b>
               <p>${director_name}</p>
-              <p><span>Writer:</span></p>
+              <b><span>Writer:</span></b>
               <p>${writers_name}</p>
-              <p><span>Actors:</span></p>
+              <b><span>Actors:</span></b>
               <p>${top_ten_actors}</p>
-              <p><span>Awards:</span></p>
-              <p>2 wins & 10 nominations</p>
+              <b><span>Awards:</span></b>
+              <p>4 wins & 7 nominations</p>
             </div>
           `;
         })
