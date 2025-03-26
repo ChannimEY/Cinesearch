@@ -1,110 +1,224 @@
-const API_KEY = "3e22ff3c3d485684d4ef358a6fe96f04";
-const IMG_CONTAINER = document.getElementById("movieDisplay");
-const SEARCH_BTN = document.getElementById("searchBtn");
-const FILTER = document.getElementById("type");
-const SEARCH_BOX = document.getElementById("searchBox");
-const PREVIOUS_BTN = document.getElementById("previousBtn");
-const NEXT_BTN = document.getElementById("nextBtn");
-const PAGINATION = document.getElementById("pagination");
+const api_key = "bca9ef1e1dad6a042f3fb2ddd3d107ab";
+const img_container = document.getElementById("movieDisplay");
+let movie_image = [];
 
-let movieImage = [];
-let currentPage = 1;
-const ROWS = 3;
-let totalPages = 1; // Total number of pages
+let current_page = 1;
+const pagination_element = document.getElementById("pagination");
+const rows = 3;
+const previous_btn = document.getElementById("prevoius");
+const next_btn = document.getElementById("next");
+const search_btn = document.getElementById("searchBtn");
 
-// Event listener for the search button
-SEARCH_BTN.addEventListener("click", () => {
-    const movieName = SEARCH_BOX.value.trim();
-    const filterValue = FILTER.value;
+const filter = document.getElementById("filter");
+const movie_filter = document.getElementById("movieFilter");
+const series_filter = document.getElementById("seriesFilter");
+let info = document.getElementById("info");
+let filter_value;
 
-    if (movieName === "") {
-        alert("Please enter a movie name");
-        return;
-    }
+fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${api_key}`)
+  .then((response) =>
+    response.ok ? response.json() : console.error("Fetching Error!")
+  )
+  .then((data) => {
+    filter_value = "Trending";
+    movie_image = data.results;
+    displayMovies();
+    setupPagination();
+  })
+  .catch((error) => console.log(error));
 
-    if (filterValue === "series" || filterValue === "movie") {
-        currentPage = 1;
-        fetchMovies(movieName, filterValue);
-    } else {
-        alert("Please select a type");
-    }
-});
-
-// Fetch movies based on search query and type
-function fetchMovies(query, type) {
-    const url = `https://api.themoviedb.org/3/search/${type}?query=${query}&api_key=${API_KEY}&page=${currentPage}`;
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            movieImage = data.results;
-            totalPages = data.total_pages; // Set the total pages based on the API response
-            displayMovies();
-            updatePaginationButtons();
-        })
-        .catch(error => console.log(error));
-}
-
-// Display the fetched movies
 function displayMovies() {
-    IMG_CONTAINER.innerHTML = movieImage
-        .map(movie => {
-            return `
-                <div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path || 'https://cdn-icons-png.flaticon.com/512/2748/2748558.png'}" alt="${movie.title || movie.name}" />
-                    <div class="movie-details">
-                        <h2>${movie.title || movie.name}</h2>
-                        <p>Rating: ${movie.vote_average}</p>
-                        <p>Release Date: ${movie.release_date || movie.first_air_date}</p>
-                        <button class="detail-btn" data-id="${movie.id}">Details</button>
-                    </div>
-                </div>
-            `;
-        })
-        .join("");
+  const start = (current_page - 1) * rows;
+  const end = start + rows;
+  const paginated_movies = movie_image.slice(start, end);
+
+  img_container.innerHTML = paginated_movies
+    .map((movie) => {
+      return `
+      <div data-aos="zoom-in-up" id="movie">
+                <img src="${
+                  movie.poster_path
+                    ? "https://image.tmdb.org/t/p/w500/" + movie.poster_path
+                    : "https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
+                }" alt="${filter_value == "Series" ? movie.name : movie.title}"/>
+        <div class="details">
+            <span>${filter_value == "Series" ? "Series" : "Movie"}</span>
+            <h2>${filter_value == "Series" ? movie.name : movie.title}</h2>
+            <div>
+              <p>${
+                filter_value == "Series"
+                  ? movie.first_air_date.substring(0, 4)
+                  : movie.release_date.substring(0, 4)
+              }</p>
+            </div>
+
+            <button class="detail-btn" data-id=${movie.id}>Details</button>
+        </div>
+      </div>
+  `;
+    })
+    .join("");
+  document.querySelectorAll(".detail-btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const movie_id = event.target.dataset.id;
+      fetchMovieDetail(movie_id);
+    });
+  });
 }
 
-// Event listener for pagination
-PREVIOUS_BTN.addEventListener("click", () => {
-    if (currentPage > 1) {
-        currentPage--;
-        const movieName = SEARCH_BOX.value.trim();
-        const filterValue = FILTER.value;
-        fetchMovies(movieName, filterValue);
-    }
+movie_filter.addEventListener("click", () => {
+  filter.innerHTML = movie_filter.textContent;
+});
+series_filter.addEventListener("click", () => {
+  filter.innerHTML = series_filter.textContent;
 });
 
-NEXT_BTN.addEventListener("click", () => {
-    if (currentPage < totalPages) {
-        currentPage++;
-        const movieName = SEARCH_BOX.value.trim();
-        const filterValue = FILTER.value;
-        fetchMovies(movieName, filterValue);
-    }
+search_btn.addEventListener("click", () => {
+  const movie_name = document.getElementById("searchBox").value;
+  if (filter.innerHTML == "type") {
+    alert("Please select type");
+    return;
+  }
+  if (movie_name === "") return;
+  current_page = 1;
+
+  if (filter.innerHTML == "Movie") {
+    filter_value = "Movie";
+    fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${movie_name}&api_key=${api_key}`
+    )
+      .then((response) =>
+        response.ok ? response.json() : console.error("Fetching Error!")
+      )
+      .then((data) => {
+        movie_image = data.results;
+        displayMovies();
+        setupPagination();
+      })
+      .catch((error) => console.log(error));
+  } else if (filter.innerHTML == "Series") {
+    filter_value = "Series";
+    fetch(
+      `https://api.themoviedb.org/3/search/tv?query=${movie_name}&api_key=${api_key}`
+    )
+      .then((response) =>
+        response.ok ? response.json() : console.error("Fetching Error!")
+      )
+      .then((data) => {
+        movie_image = data.results;
+        displayMovies();
+        setupPagination();
+      })
+      .catch((error) => console.log(error));
+  }
 });
 
-// Update pagination buttons state (previous/next)
-function updatePaginationButtons() {
-    PREVIOUS_BTN.disabled = currentPage === 1;
-    NEXT_BTN.disabled = currentPage === totalPages;
-
-    // Optionally, you can highlight the current page, but for now, we disable buttons.
-}
-
-// Event listener for movie details button
-IMG_CONTAINER.addEventListener("click", (event) => {
-    if (event.target.classList.contains("detail-btn")) {
-        const movieId = event.target.dataset.id;
-        fetchMovieDetail(movieId);
-    }
-});
-
-// Fetch detailed movie info
 function fetchMovieDetail(id) {
-    const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`;
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            alert(`Title: ${data.title}\nOverview: ${data.overview}`);
+  const is_movie = filter_value === "Movie" || filter_value === "Trending";
+  const url = is_movie
+    ? `https://api.themoviedb.org/3/movie/${id}?api_key=${api_key}`
+    : `https://api.themoviedb.org/3/tv/${id}?api_key=${api_key}`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error("Fetching Error!");
+      return response.json();
+    })
+    .then((data) => {
+      const credits_url = is_movie
+        ? `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${api_key}`
+        : `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${api_key}`;
+
+      fetch(credits_url)
+        .then((credits_response) => {
+          if (!credits_response.ok) throw new Error("Fetching Credits Error!");
+          return credits_response.json();
         })
-        .catch(error => console.log(error));
+        .then((credits_data) => {
+          const genres = data.genres.map((genre) => genre.name).join(", ");
+          const directors = credits_data.crew.filter(
+            (person) => person.job === "Director"
+          );
+          const director_name = directors.length
+            ? directors.map((director) => director.name).join(", ")
+            : "Director not found in this API!";
+          const top_ten_actors = credits_data.cast
+            .slice(0, 10)
+            .map((actor) => `${actor.name} (${actor.character})`)
+            .join(", ");
+          const writers = credits_data.crew.filter(
+            (person) => person.job === "Writer"
+          );
+          const writers_name = writers.length
+            ? writers.map((writer) => writer.name).join(", ")
+            : "Writer not found in this API!";
+          info.style.display = "flex";
+          info.innerHTML = `
+            <img  src="https://image.tmdb.org/t/p/w500/${
+              data.poster_path
+            }" alt="${is_movie ? data.title : data.name}" />
+            <div class="movie-details">
+              <p><span>Title:</span></p>
+              <p>${is_movie ? data.title : data.name}</p>
+              <p><span>Released:</span></p>
+              <p>${is_movie ? data.release_date : data.first_air_date}</p>
+              <p><span>Genre:</span></p>
+              <p>${genres}</p>
+              <p><span>Country:</span></p>
+              <p>${data.origin_country}</p>
+              <p><span>Director:</span></p>
+              <p>${director_name}</p>
+              <p><span>Writer:</span></p>
+              <p>${writers_name}</p>
+              <p><span>Actors:</span></p>
+              <p>${top_ten_actors}</p>
+              <p><span>Awards:</span></p>
+              <p>2 wins & 10 nominations</p>
+            </div>
+          `;
+        })
+        .catch((error) => console.error("Error fetching credits:", error));
+    })
+    .catch((error) => console.error("Error fetching movie details:", error));
 }
+
+let page_count_temp;
+function setupPagination() {
+  const page_count = Math.ceil(movie_image.length / rows);
+  page_count_temp = page_count;
+  pagination_element.innerHTML = "";
+
+  let start_page = Math.max(current_page - 2, 1);
+  let end_page = Math.min(start_page + 3, page_count);
+
+  for (let i = start_page; i <= end_page; i++) {
+    const button = document.createElement("button");
+    button.innerText = i;
+
+    if (current_page == i) button.classList.add("active");
+    button.addEventListener("click", () => {
+      current_page = i;
+      displayMovies();
+      setupPagination();
+    });
+
+    pagination_element.appendChild(button);
+  }
+}
+
+previous_btn.addEventListener("click", () => {
+  if (current_page == 1) {
+    return;
+  }
+  current_page--;
+  displayMovies();
+  setupPagination();
+});
+next_btn.addEventListener("click", () => {
+  if (current_page >= page_count_temp) {
+    return;
+  }
+  current_page++;
+  displayMovies();
+  setupPagination();
+});

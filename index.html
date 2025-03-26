@@ -1,34 +1,48 @@
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CineSearch</title>
 
+    <title>CineSearch</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="./asset/logobg.jpg" type="image/x-icon" />
 
-    <!-- Meta Description for SEO -->
-    <meta name="description" content="CineSearch is your go-to movie finder website. Discover the latest films, explore genres, and find showtimes effortlessly." />
+    <meta
+      name="description"
+      content="CineSearch is your go-to movie finder website. Discover the latest films, explore genres, and find showtimes effortlessly."
+    />
 
-    <!-- Meta Keywords for SEO -->
-    <meta name="keywords" content="movie finder, movie search, film discovery, CineSearch, film database" />
+    <meta
+      name="keywords"
+      content="movie finder, movie search, film discovery, CineSearch, film database"
+    />
 
-    <!-- Open Graph (OG) Tags for Social Media Sharing -->
     <meta property="og:title" content="CineSearch - Movie Finder" />
-    <meta property="og:description" content="CineSearch helps you find movies based on genres, ratings, and more. Find your next favorite film now!" />
-    <meta property="og:image" content="URL-to-image.jpg" />
+    <meta
+      property="og:description"
+      content="CineSearch helps you find movies based on genres, ratings, and more. Find your next favorite film now!"
+    />
+    <meta
+      property="og:image"
+      content="https://cdn.mos.cms.futurecdn.net/rDJegQJaCyGaYysj2g5XWY.jpg"
+    />
     <meta property="og:url" content="https://www.cinesearch.com" />
     <meta property="og:type" content="website" />
 
-    <!-- Twitter Card Tags for Twitter Sharing -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="CineSearch - Movie Finder" />
-    <meta name="twitter:description" content="Discover and search for your next favorite movie on CineSearch." />
-    <meta name="twitter:image" content="URL-to-image.jpg" />
+    <meta
+      name="twitter:description"
+      content="Discover and search for your next favorite movie on CineSearch."
+    />
+    <meta
+      name="twitter:image"
+      content="https://cdn.mos.cms.futurecdn.net/rDJegQJaCyGaYysj2g5XWY.jpg"
+    />
 
-    <!-- External Stylesheet -->
     <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
     <header>
       <div class="logo">CineSearch</div>
@@ -37,33 +51,35 @@
       <section class="hero">
         <div class="content">
           <h1>Unlimited movies, TV shows, and more</h1>
-          <div class="form">
-            <input type="text" id="searchBox" placeholder="Enter movie name" />
+          <div class="searchForm">
+            <input id="searchBox" type="text" placeholder="Enter movie name" />
+            <ul>
+              <li>
+                <p id="filter">Type ▼</p>
+                <ul class="dropdown">
+                  <li id="movieFilter">Movie</li>
+                  <li id="seriesFilter">Series</li>
+                </ul>
+              </li>
+            </ul>
             <button id="searchBtn">
               <img src="./asset/search.png" alt="" />
             </button>
-            <select name="type" id="type">
-              <option value="series">Type</option>
-              <option value="series">Series</option>
-              <option value="movie">Movies</option>
-            </select>
           </div>
         </div>
       </section>
-
-      <section id="movieDisplay"></section>
-      <section id="pagination" class="pagination">
-        <button id="previousBtn">Previous</button>
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button id="nextBtn">Next</button>
-      </section>
+      <p id="trending" class="trending">Trending Movie</p>
+      <div id="movieDisplay"></div>
+      <div class="navigation">
+        <button id="prevoius">Prevoius</button>
+        <div class="pagenumbers" id="pagination"></div>
+        <button id="next">Next</button>
+      </div>
+      <div id="info" class="info"></div>
     </main>
     <footer>
       <hr />
-      <p>&copy; 2025 CineSearch</p>
+      <p>© 2025 CineSearch</p>
     </footer>
 
     <script src="index.js"></script>
