@@ -20,17 +20,15 @@ body {
 header {
   display: flex;
   justify-content: space-between;
-  padding: 20px 60px;
+  padding: 0 25px;
   align-items: center;
   position: sticky;
-  background-color: rgb(55, 52, 52);
+background-color: white;
   top: 0;
   z-index: 99;
 }
-.logo {
-  font-size: 45px;
-  font-weight: bold;
-  color: var(--primary-color);
+.logo img {
+ width: 32%
 }
 .hero {
   display: flex;
@@ -55,20 +53,23 @@ header {
 }
 
 .searchForm {
+  width: 30%;
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  position: relative;
 }
 
 .searchForm input {
-  width: 70%;
+  width: 90%;
   font-size: 20px;
   padding: 16px 20px;
   border: none;
   outline: none;
   border-radius: 30px;
+
 }
 
 ul {
@@ -118,11 +119,11 @@ ul li ul.dropdown li:hover {
 }
 .trending {
   text-shadow: 1px 1px 5px black;
-  margin: 80px;
+  margin: 30px;
   display: flex;
   justify-content: center;
   text-align: center;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: bold;
   color: var(--primary-color);
 }
@@ -133,9 +134,11 @@ ul li ul.dropdown li:hover {
   background-color: var(--primary-color);
   border-radius: 50%;
   color: white;
+  position: absolute;
+left: 65%;
 }
 .searchForm button img {
-  width: 30px;
+  width: 28px;
   margin-top: 3px;
 }
 
@@ -227,6 +230,7 @@ ul li ul.dropdown li:hover {
   grid-template-columns: 120px auto;
   padding-left: 7%;
 }
+
 
 .navigation {
   display: flex;

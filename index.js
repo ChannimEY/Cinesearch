@@ -169,7 +169,8 @@ function fetchMovieDetail(id) {
             ? writers.map((writer) => writer.name).join(", ")
             : "Writer not found in this API!";
           info.style.display = "flex";
-          info.innerHTML = `
+          info.innerHTML = ` <h2>film info:</h2>
+
 <img src="https://image.tmdb.org/t/p/w500/${data.poster_path}"
      alt="${is_movie ? data.title : "No Image Available"}"
      onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=';" />
